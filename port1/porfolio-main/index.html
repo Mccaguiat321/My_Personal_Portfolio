@@ -1,0 +1,960 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Responsive Personal Portfolio</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+<style>
+
+:root {
+  --falling-numbers-color: #0ef; /* Default color for dark mode */
+}
+
+
+   
+.animated-img {
+  opacity: 0;
+  transform: translateX(-100px); /* Start off-screen to the left */
+  transition: opacity 1s ease 1s, transform 1s ease 0.5s; /* Adds a 1s delay */
+}
+
+
+/* Initial hidden state for text (right to left entry) */
+.animated-text {
+  opacity: 0;
+  transform: translateX(100px); /* Start off-screen to the right */
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+/* Animation class that triggers entry (image moves to the right) */
+.animate-in {
+  opacity: 1;
+  transform: translateX(0); /* Move to the original position */
+}
+
+/* Animation class for exit (image exits left) */
+.animate-out-left {
+  opacity: 0;
+  transform: translateX(-100px); /* Exit to the left */
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+/* Animation class for exit (text exits right) */
+.animate-out-right {
+  opacity: 0;
+  transform: translateX(100px); /* Exit to the right */
+  transition: opacity 1s ease, transform 1s ease;
+}
+/* Base styles for services-box */
+/* Base styles for services-box */
+/* Base styles for services-box */
+/* Base styles for services-box */
+.services-box {
+  opacity: 0;
+  transform: translateX(0);
+  transition: opacity 1s ease-out, transform 1s ease-out; /* Increased duration */
+}
+
+/* Define the animation classes */
+.animate-left {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.animate-left.entered {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.animate-up {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.animate-up.entered {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.animate-right {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.animate-right.entered {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.animate-left.exited {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.animate-up.exited {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.animate-right.exited {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+@keyframes slideLeftToRight {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideRightToLeft {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.portfolio-box {
+  opacity: 0;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.portfolio-box.left-to-right {
+  animation-name: slideLeftToRight;
+}
+
+.portfolio-box.right-to-left {
+  animation-name: slideRightToLeft;
+}
+
+.portfolio-box.hidden {
+  animation-name: none;
+  opacity: 0;
+}
+/* Define the animation */
+@keyframes slideInFromBottom {
+  from {
+    transform: translateX(-100%); /* Start below the viewport */
+    opacity: 0; /* Start as invisible */
+  }
+  to {
+    transform: translateY(0); /* End at its original position */
+    opacity: 1; /* End as fully visible */
+  }
+}
+
+/* Apply the animation to the home-content */
+.home-content {
+  animation: slideInFromBottom 1s ease-out; /* Adjust duration and timing function as needed */
+}
+
+
+</style>
+<style>
+  .typing {
+  
+      font-family: 'Courier New', Courier, monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: .15em solid #0ef; /* Cursor */
+      animation: blink-caret .75s step-end infinite;
+  }
+  @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: #0ef; }
+  }
+  .about {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      position: relative;
+      height: 100vh;
+      z-index: 10;
+    }
+
+/* Container styles for all falling numbers containers */
+.hacking-numbers, .hacking-numberss {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Common styles for all falling spans */
+.hacking-numbersssss span, .hacking-numberssss span, .hacking-numbersss span, .hacking-numbers span, .hacking-numberss span {
+  position: absolute;
+  font-family: monospace;
+  font-size: 1.2rem;
+  color: var(--falling-numbers-color); /* Use the CSS variable for color */
+  white-space: nowrap;
+  user-select: none;
+  opacity: 0;
+  animation: fall linear infinite;
+}
+
+/* Keyframes for falling animation */
+@keyframes fall {
+  0% {
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+
+</style>
+
+<style>
+  /* Basic styles for the modal */
+  .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+  }
+  .modal-content {
+      width: 300px;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      text-align: center;
+      transform: scale(0) rotate(-360deg);
+      opacity: 0;
+      animation: spinInAndGrow s forwards;
+  }
+  @keyframes spinInAndGrow {
+      0% {
+          transform: rotate(-360deg) translateX(-100vw) scale(0.5);
+          opacity: 0;
+      }
+      50% {
+          transform: rotate(180deg) translateX(0) scale(1.2);
+          opacity: 0.7;
+      }
+      100% {
+          transform: rotate(0) translateX(0) scale(1);
+          opacity: 1;
+      }
+  }
+  /* Button to open the modal */
+  .open-modal {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      position: relative;
+      z-index: 1001;
+  }
+  /* Close button inside the modal */
+  .close-modal {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 1.5em;
+      color: #333;
+  }
+  
+</style>
+<style>
+
+
+
+.animate-left, .animate-right, .animate-bottom {
+  opacity: 0;
+  transition: transform 2s ease, opacity 1s ease;
+  transition-delay: 0s; /* Default delay */
+}
+
+.animate-left {
+  transform: translateX(-100%);
+}
+
+.animate-right {
+  transform: translateX(100%);
+}
+
+.animate-bottom {
+  transform: translateY(100%);
+}
+
+.visible {
+  transform: translateX(0) !important;
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+}
+
+
+@keyframes slideFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideFromBottom {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+</style>
+
+<style>
+
+        .education-section h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            border-left: 5px solid #3498db;
+            padding-left: 10px;
+        }
+        .education-item {
+            border-bottom: 1px solid black;
+            color: black !important;
+            padding: 5px 0;
+        }
+        .education-item:last-child {
+            border-bottom: none;
+        }
+        .education-item p {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+        .education-item strong {
+            color: #3498db;
+        }
+        .education-item:hover {
+            background-color: #f9fafb;
+            transition: 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+        }
+  
+</style>
+</head>
+
+<body>
+
+  <header class="header">
+    <a href="#" class="logo">Portfolio</a>
+    <i class='bx bx-menu' id="menu-icon"></i>
+    <nav class="navbar">
+      <a href="#home" class="active">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div onclick="toggleMode()" class="bx bx-moon" id="darkMode-icon"></div>
+  </header>
+  <!--   home section design -->
+  <section class="home" id="home">
+    <div class="home-content">
+      <h3>Hello,It's Me</h3>
+      <h1 id="typing-text" class="typing" style="  font-size: 50px;"></h1>
+      <h3>And I'm a <span class="multiple-text">Web Developer</span></h3>
+      <p>Student From NEUEST POC</p>
+      <div class="social-media">
+        <a href="https://www.facebook.com/mc.caguiat.3/"><i class='bx bxl-facebook'></i></a>
+        <a href="https://github.com/Mccaguiat321"><i class='bx bxl-github'></i></a>
+        <a href="https://www.instagram.com/caguiatmc/"><i class='bx bxl-instagram-alt'></i></a>
+        <a href="https://www.linkedin.com/in/caguiat-mark-christian-domindiano-8a6b94326/"><i class='bx bxl-linkedin'></i></a>
+   
+      </div>
+      <a href="Beige Minimalist Corporate IT Project Manager Resume.pdf" download class="btn">
+        Download CV
+      </a>
+      
+    </div>
+    <div class="home-img">
+      <img src="./img/p1.png" alt="">
+    </div>
+    <div class="hacking-numberss"></div>
+  </section>
+  <section class="about" id="about">
+    <div class="about-img animated-img">
+      <img src="./img/image1.png" alt="About Me Image">
+    </div>
+    <div class="about-content animated-text">
+      <h2 class="heading">About<span>Me</span></h2>
+      <h4 class="headings"><span>Mark</span>Caguiat</h4>
+     <br><br>
+      <p>Hi! I'm a 4th-year college student at NEUST Peñaranda, pursuing a  degree  in programming. Coding is not just my passion—it's a huge part of my daily life. I spend most of my time working on programming projects, learning new languages, and improving my skills. Currently, my favorite programming languages are PHP, Python, and JavaScript, and I'm diving into Laravel to expand my web development expertise.
+
+        Outside of coding, I love playing basketball and mobile games like CODM and Mobile Legends. I also run a Facebook page where I create content and tutorials to help others learn programming. 
+      </p>
+     
+      <button class="btn open-modal"> Read More</button>
+    </div>
+
+
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+          <span class="close-modal">&times;</span>
+         <!-- <div class="container"> -->
+    <div class="education-section">
+        <div class="education-item">
+            <h2>TERTIARY</h2>
+            <p>Bachelor of Science in Information Technology</p>
+            <p><strong>2016 - 2018</strong></p>
+            <p>Brgy. Poblacion 1, Peñaranda, Nueva Ecija</p>
+        </div>
+
+        <div class="education-item">
+            <h2>SENIOR HIGH SCHOOL</h2>
+            <p>PEÑARANDA NATIONAL HIGH SCHOOL</p>
+            <p><strong>2021 - 2022</strong></p>
+            <p>Brgy. Poblacion 1, Peñaranda , Nueva Ecija</p>
+        </div>
+
+        <div class="education-item">
+            <h2>JUNIOR HIGH SCHOOL</h2>
+            <p>PEÑARANDA NATIONAL HIGH SCHOOL</p>
+            <p><strong>2018 - 2019</strong></p>
+            <p>Brgy. Poblacion 1, Peñaranda , Nueva Ecija</p>
+        </div>
+
+        <div class="education-item">
+            <h2>PRIMARY</h2>
+            <p>SALUYSOY CENTRAL SCHOOL</p>
+            <p><strong>2013 - 2014</strong></p>
+            <p>Brgy. Saluysoy, Meycauayan, Bulacan</p>
+        </div>
+    <!-- </div> -->
+</div>
+      </div>
+  </div>
+  <div class="hacking-numbers"></div>
+  </section>
+
+  <section class="services" id="services">
+    <div class="hacking-numbersss"></div>
+    <h2 class="heading">Our <span>Services</span></h2>
+       
+    <div class="services-container">
+      
+      <div class="services-box animate-left">
+        
+        <i class='bx bx-code-alt'></i>
+        <h3>Web Development</h3>
+        <p>the power to create beautiful and intuitive user interfaces...</p>
+        <a href="#" class="btn">Read More</a>
+      </div>
+      <div class="services-box animate-up">
+        <i class='bx bxs-paint'></i>
+        <h3>Graphics Design</h3>
+        <p>Your ability to bring designs to life using HTML, CSS...</p>
+        <a href="#" class="btn">Read More</a>
+      </div>
+      <div class="services-box animate-right">
+        <i class='bx bx-bar-chart-alt'></i>
+        <h3>Digital Marketing</h3>
+        <p>It's also about understanding user needs, collaborating...</p>
+        <a href="#" class="btn">Read More</a>
+        
+      </div>
+     
+    </div>
+    
+  </section>
+  
+
+  
+  <section class="Portfolio" id="portfolio">
+    <div class="hacking-numberssss"></div>
+    <h2 class="heading">Latest <span>Project</span></h2>
+    <br>
+    <br>
+    <div class="portfolio-container">
+      <div class="portfolio-box">
+        <img src="./img/Screenshot 2024-09-03 031634.png"
+          alt="">
+        <div class="portfolio-layer">
+          <h4>POINT OF SALE</h4>
+          <p> It's also about a point-of-sales system for a vape shop with three users: admin, staff, and client. It includes inventory and statistics, using PHP, JavaScript, HTML, CSS, Bootstrap, and Tailwind.</p>
+          <a href="#"><i class='bx bx-link-external'></i></a>
+        </div>
+      </div>
+
+      <div class="portfolio-box">
+        <img src="./img/pos1.jpg"
+          alt="">
+        <div class="portfolio-layer">
+          <h4>INVENTORY</h4>
+          <p> It's also about an inventory and point-of-sales system for a drug store named Nurse Ry Pharmacy. It is a desktop application using Java with drag-and-drop functionality</p>
+          <a href="#"><i class='bx bx-link-external'></i></a>
+        </div>
+      </div>
+
+      <div class="portfolio-box">
+        <img src="./img/votingpic.png"
+          alt="">
+        <div class="portfolio-layer">
+          <h4>VOTING SYSTEM</h4>
+          <p>It's also about a voting system for our local government, using PHP, CSS, HTML, Bootstrap, and Tailwind.</p>
+          <a href="#"><i class='bx bx-link-external'></i></a>
+        </div>
+      </div>
+
+      <div class="portfolio-box">
+        <img src="./img/mn1.png"
+          alt="">
+        <div class="portfolio-layer">
+          <h4>MOMERY GAME</h4>
+          <p> It's also about practicing memorizing numbers using HTML, CSS, and JavaScript.</p>
+          <a href="https://gameby-caguiat.vercel.app/"><i class='bx bx-link-external'></i></a>
+        </div>
+      </div>
+
+
+      <div class="portfolio-box">
+        <img src="./img/Screenshot 2024-09-12 101907.png"
+          alt="">
+        <div class="portfolio-layer">
+          <h4>CHAT BOX </h4>
+          <p> "It's about chatting with each other using intranet connectivity, allowing communication between users "</p>
+          <a href="#"><i class='bx bx-link-external'></i></a>
+        </div>
+      </div>
+
+
+      <div class="portfolio-box">
+        <img src="./img/walapangalan.png"
+          alt="">
+        <div class="portfolio-layer">
+          <h4>Music Player</h4>
+          <p> It's also about understanding user needs, collaborating with designers, and constantly learning and
+            adapting to new technologies and best practices.</p>
+          <a href="https://music-player-orcin-mu.vercel.app/"><i class='bx bx-link-external'></i></a>
+        </div>
+        
+      </div>
+      
+    </div>
+
+    
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="hacking-numbersssss"></div>
+    <h2 class="heading">Contact<span>Me!</span></h2>
+    <form>
+      <div class="input-box">
+        <input type="text" placeholder="Full Name" class="animate-left">
+        <input type="email" placeholder="Email Address" class="animate-right">
+      </div>
+      <div class="input-box">
+        <input type="number" placeholder="Phone Number" class="animate-left">
+        <input type="text" placeholder="Email Subject" class="animate-right">
+      </div>
+      <textarea name="" id="" cols="30" rows="10" placeholder="Your Message"  class="btn animate-bottom"></textarea>
+      <input type="submit" value="Send Message" class="btn animate-bottom">
+    </form>
+  </section>
+  
+  <footer class="footer">
+    <div class="footer-text">
+      <p></p>
+    </div>
+    <div class="footer-iconTop"><a href="#home"><i class='bx bx-up-arrow-alt'></i></a></div>
+  </footer>
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+  <script src="script.js"></script>
+  <script>
+    function toggleMode() {
+      const body = document.body;
+      const darkModeIcon = document.getElementById('darkMode-icon');
+  
+      // Check if dark mode is currently enabled
+      if (body.classList.contains('dark-mode')) {
+          // Switch to light mode by removing the dark-mode class
+          body.classList.remove('dark-mode');
+          darkModeIcon.classList.remove('dark-mode');
+  
+          // Update CSS variables for light mode
+          document.documentElement.style.setProperty('--bg-color', '#ffffff'); // Light background
+          document.documentElement.style.setProperty('--second-bg-color', '#f0f0f0'); // Light secondary background
+          document.documentElement.style.setProperty('--text-color', '#000000'); // Dark text color
+          document.documentElement.style.setProperty('--main-color', '#007bff'); // Primary color for light mode
+          document.documentElement.style.setProperty('--falling-numbers-color', 'black'); // Light mode color for falling numbers
+  
+          // Save the preference in localStorage
+          localStorage.setItem('darkMode', 'disabled');
+      } else {
+          // Enable dark mode by adding the dark-mode class
+          body.classList.add('dark-mode');
+          darkModeIcon.classList.add('dark-mode');
+  
+          // Update CSS variables for dark mode
+          document.documentElement.style.setProperty('--bg-color', '#1f242d');
+          document.documentElement.style.setProperty('--second-bg-color', '#323946');
+          document.documentElement.style.setProperty('--text-color', '#ffffff');
+          document.documentElement.style.setProperty('--main-color', '#0ef');
+          document.documentElement.style.setProperty('--falling-numbers-color', '#0ef'); // Dark mode color for falling numbers
+  
+          // Save the preference in localStorage
+          localStorage.setItem('darkMode', 'enabled');
+      }
+  }
+  
+  // Check localStorage to apply the saved theme on page load
+  if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('darkMode-icon').classList.add('dark-mode');
+      
+      // Apply dark mode variables
+      document.documentElement.style.setProperty('--bg-color', '#1f242d');
+      document.documentElement.style.setProperty('--second-bg-color', '#323946');
+      document.documentElement.style.setProperty('--text-color', '#ffffff');
+      document.documentElement.style.setProperty('--main-color', '#0ef');
+      document.documentElement.style.setProperty('--falling-numbers-color', '#0ef'); // Dark mode color for falling numbers
+  } else {
+      // Apply light mode variables
+      document.documentElement.style.setProperty('--bg-color', '#ffffff');
+      document.documentElement.style.setProperty('--second-bg-color', '#f0f0f0');
+      document.documentElement.style.setProperty('--text-color', '#000000');
+      document.documentElement.style.setProperty('--main-color', '#007bff');
+      document.documentElement.style.setProperty('--falling-numbers-color', 'black'); // Light mode color for falling numbers
+    }
+    
+    // Start the falling number effect for all containers
+    document.addEventListener('DOMContentLoaded', startFallingNumbers);
+  </script>
+  
+
+<script>
+// Create an observer for elements to trigger animation on scroll in and out
+// Create an observer to trigger animations when in view and remove when out of view
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // When in view, animate the entry (image moves right, text moves left)
+      entry.target.classList.add('animate-in');
+      entry.target.classList.remove('animate-out-left', 'animate-out-right');
+    } else {
+      // When out of view, animate the exit (image moves left, text moves right)
+      if (entry.boundingClientRect.top < 0) { 
+        // When scrolling further down (section exits at the top)
+        if (entry.target.classList.contains('animated-img')) {
+          entry.target.classList.add('animate-out-left');
+        }
+        if (entry.target.classList.contains('animated-text')) {
+          entry.target.classList.add('animate-out-right');
+        }
+      } else {
+        // Reset animations when scrolling up to re-enter the view
+        entry.target.classList.remove('animate-in');
+      }
+    }
+  });
+}, { threshold: 0.5 }); // Trigger when 50% of the element is visible
+
+// Get the elements to animate
+const animatedElements = document.querySelectorAll('.animated-img, .animated-text');
+
+// Observe each element
+animatedElements.forEach(element => {
+  observer.observe(element);
+});
+
+
+  
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  function handleScroll() {
+    const boxes = document.querySelectorAll('.services-box');
+    const windowHeight = window.innerHeight;
+
+    boxes.forEach(box => {
+      const boxTop = box.getBoundingClientRect().top;
+      const boxBottom = box.getBoundingClientRect().bottom;
+
+      if (boxTop < windowHeight && boxBottom > 0) {
+        // Element is in viewport
+        box.classList.add('entered');
+        box.classList.remove('exited');
+      } else {
+        // Element is out of viewport
+        box.classList.add('exited');
+        box.classList.remove('entered');
+      }
+    });
+  }
+
+  // Add scroll event listener
+  window.addEventListener('scroll', handleScroll);
+
+  // Initial check to handle cases where the user loads the page and some elements are already in view
+  handleScroll();
+});
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  const options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const boxes = entry.target.querySelectorAll('.portfolio-box');
+        boxes.forEach((box, index) => {
+          if (index < 3) {
+            box.classList.add('left-to-right');
+          } else {
+            box.classList.add('right-to-left');
+          }
+          box.classList.remove('hidden');
+        });
+      } else {
+        const boxes = entry.target.querySelectorAll('.portfolio-box');
+        boxes.forEach((box) => {
+          box.classList.add('hidden');
+          box.classList.remove('left-to-right', 'right-to-left');
+        });
+      }
+    });
+  }, options);
+
+  const portfolioSection = document.querySelector('#portfolio');
+  observer.observe(portfolioSection);
+});
+
+</script>
+
+
+<script>
+  document.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section');
+      const navLinks = document.querySelectorAll('.navbar a');
+
+      let current = '';
+
+      sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          if (pageYOffset >= sectionTop - 50 && pageYOffset < sectionTop + sectionHeight - 50) {
+              current = section.getAttribute('id');
+          }
+      });
+
+      navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${current}`) {
+              link.classList.add('active');
+          }
+      });
+  });
+</script>
+<script>
+  const text = "Unknown Coder";
+  const element = document.getElementById("typing-text");
+  let index = 0;
+  let isTyping = true;
+  let typingInterval;
+
+  function type() {
+      if (isTyping) {
+          if (index < text.length) {
+              element.textContent += text.charAt(index);
+              index++;
+          } else {
+              isTyping = false;
+              setTimeout(() => {
+                  // Start deleting after a pause
+                  deleteText();
+              }, 1000); // Pause duration before deleting
+          }
+      }
+  }
+
+  function deleteText() {
+      // Ensure that the first letter stays visible
+      if (index > 1) {
+          element.textContent = text.slice(0, index - 1);
+          index--;
+          setTimeout(deleteText, 50); // Speed of deletion
+      } else {
+          // Reset the text to the first letter and start typing again
+          element.textContent = text.charAt(0);
+          index = 1; // Ensure the first letter is kept and start adding new characters
+          isTyping = true;
+          setTimeout(() => {
+              // Start typing again after a pause
+              typingInterval = setInterval(type, 500); // Typing speed
+          }, 1000); // Pause duration before typing
+      }
+  }
+
+  typingInterval = setInterval(type, 100); // Typing speed
+</script>
+<script>
+  // Get modal element and button
+  const modal = document.getElementById("myModal");
+  const openModalBtn = document.querySelector(".open-modal");
+  const closeModalSpan = document.querySelector(".close-modal");
+
+  // Function to open the modal
+  function openModal() {
+      modal.style.display = "flex";
+      // Start animation only after the display is set
+      setTimeout(() => {
+          modal.querySelector(".modal-content").style.animation = "spinInAndGrow 1s forwards";
+      }, 10);
+  }
+
+  // Function to close the modal
+  function closeModal() {
+      modal.style.display = "none";
+      modal.querySelector(".modal-content").style.animation = "";
+  }
+
+  // Event listeners
+  openModalBtn.addEventListener("click", openModal);
+  closeModalSpan.addEventListener("click", closeModal);
+  window.addEventListener("click", (event) => {
+      if (event.target === modal) {
+          closeModal();
+      }
+  });
+</script>
+
+
+<script>
+
+  // Function to handle creating falling numbers for any container
+  function createFallingNumber(container) {
+    const span = document.createElement('span');
+    const randomNumber = Math.floor(Math.random() * 10); // Random digit from 0-9
+    span.textContent = randomNumber;
+    
+    // Random starting position on the X axis
+    const randomXPosition = Math.random() * container.clientWidth;
+
+    // Set initial style properties
+    span.style.left = `${randomXPosition}px`;
+    span.style.animationDuration = `${Math.random() * 3 + 2}s`; // Random speed for falling
+    span.style.opacity = Math.random(); // Random opacity
+    span.style.fontSize = `${Math.random() * 1.5 + 0.8}rem`; // Random size
+
+    container.appendChild(span);
+
+    // Remove span after animation completes to avoid excessive DOM nodes
+    setTimeout(() => {
+      span.remove();
+    }, parseFloat(span.style.animationDuration) * 1000); // Matches the animation duration
+  }
+
+  // Continuously create falling numbers at an interval for all containers
+  function startFallingNumbers() {
+    const containers = document.querySelectorAll('.hacking-numbersss, .hacking-numberssss, .hacking-numbersssss, .hacking-numbers, .hacking-numberss');
+    
+    containers.forEach(container => {
+      setInterval(() => createFallingNumber(container), 100); // Adjust interval as needed
+    });
+  }
+
+  // Start the falling number effect for all containers
+  document.addEventListener('DOMContentLoaded', startFallingNumbers);
+
+
+</script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const options = {
+      threshold: 0.3 // Trigger when 30% of the section is visible
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const elements = entry.target.querySelectorAll('.animate-left, .animate-right, .animate-bottom');
+          
+          elements.forEach((el, index) => {
+            // Use setTimeout to create sequential animation delay
+            setTimeout(() => {
+              el.classList.add('visible');
+            }, index * 1000); // Delay each element by 1000ms (1 second)
+          });
+        } else {
+          // If the section is no longer in view, reset the animations
+          const elements = entry.target.querySelectorAll('.animate-left, .animate-right, .animate-bottom');
+          elements.forEach(el => {
+            el.classList.remove('visible');
+          });
+        }
+      });
+    }, options);
+
+    const contactSection = document.querySelector('.contact');
+    observer.observe(contactSection);
+  });
+</script>
+
+
+
+</body>
+
+</html>
+
